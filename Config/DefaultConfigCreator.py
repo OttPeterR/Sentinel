@@ -3,6 +3,7 @@ import os
 
 defaultConfig = '/sentinel.cfg'
 
+
 def createDefaultConfig():
     fullPath = __getFullPath()
 
@@ -34,14 +35,14 @@ def createDefaultConfig():
 
     config.write(file)
 
-    print('Default config written to: '+getConfigPath())
-
+    print('Default config written to: ' + getConfigPath())
 
 
 def __getFullPath():
     # the -7 backs out of the /Config directory
     # to get to the top level dir
     return os.path.dirname(os.path.abspath(__file__))[:-7]
+
 
 def getConfigPath():
     fullPath = str(__getFullPath())

@@ -11,14 +11,13 @@ class ConfigHelper():
     loaded = False
     ConfigParser = ConfigParser.ConfigParser()
 
-    #loads up the config file, or a default if its missing
+    # loads up the config file, or a default if its missing
     def startUp(self):
         global loaded
         if loaded:
             return
         else:
             self.reloadConfig()
-
 
     def reloadConfig(self):
         global configParser
@@ -31,11 +30,10 @@ class ConfigHelper():
         # now that we know it's there, load it up
         self.loadConfig()
 
-
     def getConfigPath(self):
         return DefaultConfigCreator.getConfigPath()
 
-    #given the path to the config, load it
+    # given the path to the config, load it
     def loadConfig(self):
         global configParser
         global loaded
@@ -49,9 +47,6 @@ class ConfigHelper():
         loaded = True
 
 
-
-
-
 ######################################
 ########### access methods ###########
 ######################################
@@ -62,6 +57,7 @@ class ConfigHelper():
 # Telegram_Bot
 telegram = 'Telegram_Bot'
 
+
 def getBotID():
     return configParser.get(telegram, "Bot_ID")
 
@@ -69,41 +65,58 @@ def getBotID():
 # Designated_User
 user = 'Designated_User'
 
+
 def getUser():
-    return configParser.get(user,'designated_user')
+    return configParser.get(user, 'designated_user')
+
+
 def getUserChatID():
-    return configParser.get(user,'user_chat_Id')
+    return configParser.get(user, 'user_chat_Id')
+
+
 def getUserMAC():
-    return configParser.get(user,'user_MAC')
+    return configParser.get(user, 'user_MAC')
+
+
 def checkForUserOnWiFi():
-    return configParser.getboolean(user,'check_for_user_on_wifi')
+    return configParser.getboolean(user, 'check_for_user_on_wifi')
+
+
 def getWiFiCheckFrequency():
-    return float(configParser.get(user,'wifi_check_freq'))
+    return float(configParser.get(user, 'wifi_check_freq'))
+
+
 def getWiFiAddress():
     return configParser.get(user, 'ip_address_to_scan')
+
+
 def getUserPresentCooldown():
-    return float(configParser.get(user,'user_is_present_cooldown_minutes'))
+    return float(configParser.get(user, 'user_is_present_cooldown_minutes'))
 
 
 # Image_Motion_Detection
 image = 'Image_Motion_Detection'
 
+
 def getImageRefreshFreq():
     return int(configParser.get(image, 'image_refresh_freq'))
+
+
 def getResX():
     return int(configParser.get(image, 'res_x'))
+
+
 def getResY():
     return int(configParser.get(image, 'res_y'))
+
+
 def detectIfUserIsPresent():
     return configParser.getboolean(image, 'detect_if_user_present')
+
+
 def getPixelDiffThreshold():
     return float(configParser.get(image, 'pixel_diff_threshold'))
+
+
 def getImageChangeThreshold():
     return float(configParser.get(image, 'image_change_threshold'))
-
-
-
-
-
-
-
