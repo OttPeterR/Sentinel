@@ -1,6 +1,6 @@
 import os
 
-import DefaultConfigCreator
+from Config import DefaultConfigCreator
 
 
 class ConfigHelper():
