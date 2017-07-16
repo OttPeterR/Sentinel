@@ -5,11 +5,11 @@ from Config import DefaultConfigCreator
 
 class ConfigHelper():
     global loader
-    global ConfigParser
+    global configParser
     global defaultConfigPath
 
     loaded = False
-    ConfigParser = ConfigParser.ConfigParser()
+    configParser = ConfigParser.ConfigParser()
 
     # loads up the config file, or a default if its missing
     def startUp(self):
