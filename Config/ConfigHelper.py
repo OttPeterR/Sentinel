@@ -78,26 +78,28 @@ def getUserMAC():
 def checkForUserOnWiFi():
     return configParser.getboolean(user,'check_for_user_on_wifi')
 def getWiFiCheckFrequency():
-    return configParser.get(user,'wifi_check_freq')
+    return float(configParser.get(user,'wifi_check_freq'))
+def getWiFiAddress():
+    return configParser.get(user, 'ip_address_to_scan')
 def getUserPresentCooldown():
-    return configParser.get(user,'user_is_present_cooldown_minutes')
+    return float(configParser.get(user,'user_is_present_cooldown_minutes'))
 
 
 # Image_Motion_Detection
 image = 'Image_Motion_Detection'
 
 def getImageRefreshFreq():
-    return configParser.get(image, 'image_refresh_freq')
+    return int(configParser.get(image, 'image_refresh_freq'))
 def getResX():
-    return configParser.get(image, 'res_x')
+    return int(configParser.get(image, 'res_x'))
 def getResY():
-    return configParser.get(image, 'res_y')
+    return int(configParser.get(image, 'res_y'))
 def detectIfUserIsPresent():
     return configParser.getboolean(image, 'detect_if_user_present')
 def getPixelDiffThreshold():
-    return configParser.get(image, 'pixel_diff_threshold')
+    return float(configParser.get(image, 'pixel_diff_threshold'))
 def getImageChangeThreshold():
-    return configParser.get(image, 'image_change_threshold')
+    return float(configParser.get(image, 'image_change_threshold'))
 
 
 
