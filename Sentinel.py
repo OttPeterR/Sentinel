@@ -1,4 +1,7 @@
 # SentinelBot for Telegram
+#
+# This will only run on a Raspberry Pi with a camera module
+#
 # monitors RaspberryPi camera for movement
 # will send a picture upon seeing movement or upon request
 
