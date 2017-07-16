@@ -39,26 +39,26 @@ config = ConfigHelper.ConfigHelper()
 config.startUp()
 
 # network
-local_IP = config.getWiFiAddress()
+local_IP = ConfigHelper.getWiFiAddress()
 
 # user parameters
-approved_user = config.getUser()
-approved_user_chat_id = config.getUserChatID()
-approved_local_MAC_addresses = [config.getUserMAC()]
+approved_user = ConfigHelper.getUser()
+approved_user_chat_id = ConfigHelper.getUserChatID()
+approved_local_MAC_addresses = [ConfigHelper.getUserMAC()]
 last_user_check_time = 0
-check_for_user_on_wifi = config.checkForUserOnWiFi()
-user_check_frequency = 1000 * config.getWiFiCheckFrequency()  # check every x seconds
+check_for_user_on_wifi = ConfigHelper.checkForUserOnWiFi()
+user_check_frequency = 1000 * ConfigHelper.getWiFiCheckFrequency()  # check every x seconds
 user_is_present = False
-user_is_present_cooldown = 60000 * config.getUserPresentCooldown()  # wait x minutes before user is marked as gone
+user_is_present_cooldown = 60000 * ConfigHelper.getUserPresentCooldown()  # wait x minutes before user is marked as gone
 user_last_seen_time = 0
 # chat parameters
 chat_refresh_frequency = 50  # milliseconds between each chat check
-image_refresh_frequency = 1000 * config.getImageRefreshFreq()  # x seconds per image check
+image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
 
 # camera related parameters
 photo_uploading_message = 'image is being uploaded...'
-motion_image_width = config.getResX()
-motion_image_height = config.getRexY()
+motion_image_width = ConfigHelper.getResX()
+motion_image_height = ConfigHelper.getRexY()
 time_of_last_image = 0
 previous_image_buffer = 0
 current_image_buffer = 0
@@ -209,7 +209,7 @@ def userOnWiFiNetwork():
 ############################
 
 ### --- this is a secret ID, do no share --- ###
-bot = telepot.Bot(config.getBotID())
+bot = telepot.Bot(ConfigHelper.getBotID())
 bot.message_loop(handle)
 print('%s is active...' % name)
 print('  sending active message to %s' % approved_user)
