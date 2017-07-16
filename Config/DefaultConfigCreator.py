@@ -20,6 +20,7 @@ def createDefaultConfig():
     config.set(user, 'user_MAC', '00:00:00:00:00:00')
     config.set(user, 'check_for_user_on_wifi', True)
     config.set(user, 'wifi_check_freq', 10)
+    config.set(user, 'ip_address_to_scan', '192.168.0.0')
     config.set(user, 'user_is_present_cooldown_minutes', 5)
 
     image = 'Image_Motion_Detection'
@@ -33,7 +34,7 @@ def createDefaultConfig():
 
     config.write(file)
 
-    print 'Default config written to: '+getConfigPath()
+    print('Default config written to: '+getConfigPath())
 
 
 
