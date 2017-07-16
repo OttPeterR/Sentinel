@@ -12,12 +12,12 @@ def createDefaultConfig():
 
     telegram = 'Telegram_Bot'
     config.add_section(telegram)
-    config.set(telegram, 'Bot_ID', '0123456789:ABCabcABCabcABCabcABCabcABCabcABCabc')
+    config.set(telegram, 'bot_id', '0123456789:ABCabcABCabcABCabcABCabcABCabcABCabc')
 
     user = 'Designated_User'
     config.add_section(user)
     config.set(user, 'designated_user', 'your-user-name-here')
-    config.set(user, 'user_chat_ID', 'your-chat-ID-here')
+    config.set(user, 'user_chat_id', 'your-chat-ID-here')
     config.set(user, 'user_MAC', '00:00:00:00:00:00')
     config.set(user, 'check_for_user_on_wifi', True)
     config.set(user, 'wifi_check_freq', 10)
