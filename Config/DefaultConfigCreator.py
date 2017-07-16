@@ -33,6 +33,8 @@ def createDefaultConfig():
 
     config.write(file)
 
+    print 'Default config written to: '+getConfigPath()
+
 
 
 def __getFullPath():
