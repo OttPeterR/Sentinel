@@ -52,7 +52,7 @@ telegram = 'Telegram_Bot'
 
 
 def getBotID():
-    return configParser.get(telegram, "Bot_ID")
+    return configParser.get(telegram, "bot_id")
 
 
 # Designated_User
@@ -64,7 +64,7 @@ def getUser():
 
 
 def getUserChatID():
-    return configParser.get(user, 'user_chat_Id')
+    return configParser.get(user, 'user_chat_id')
 
 
 def getUserMAC():
