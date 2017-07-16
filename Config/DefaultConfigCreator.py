@@ -44,6 +44,3 @@ def getConfigPath():
     fullPath = str(__getFullPath())
     defaultConfigPath = fullPath + defaultConfig
     return defaultConfigPath
-
-
-createDefaultConfig()
