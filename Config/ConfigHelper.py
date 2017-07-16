@@ -13,13 +13,6 @@ class ConfigHelper():
 
     # loads up the config file, or a default if its missing
     def startUp(self):
-        global loaded
-        if loaded:
-            return
-        else:
-            self.reloadConfig()
-
-    def reloadConfig(self):
         global configParser
 
         # check if config is missing
