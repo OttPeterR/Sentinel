@@ -19,7 +19,7 @@ def createDefaultConfig():
     config.set(user, 'user_chat_ID', 'your-chat-ID-here')
     config.set(user, 'user_MAC', '00:00:00:00:00:00')
     config.set(user, 'check_for_user_on_wifi', True)
-    config.set(user, 'check_for_user_on_network_freq', 10)
+    config.set(user, 'wifi_check_freq', 10)
     config.set(user, 'user_is_present_cooldown_minutes', 5)
 
     image = 'Image_Motion_Detection'
@@ -31,7 +31,7 @@ def createDefaultConfig():
     config.set(image, 'pixel_diff_threshold', 15)
     config.set(image, 'image_change_threshold', 5)
 
-
+    config.write(file)
 
 
 
