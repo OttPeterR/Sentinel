@@ -35,8 +35,7 @@ from Config import ConfigHelper
 
 # general
 name = 'Sentinel'
-config = ConfigHelper.ConfigHelper()
-config.startUp()
+ConfigHelper.ConfigHelper().startUp()
 
 # network
 local_IP = ConfigHelper.getWiFiAddress()
@@ -66,8 +65,8 @@ current_image_buffer = 0
 disable_cam_if_user_is_present = True
 
 # image difference parameters
-pixel_diff_threshold = config.getPixelDiffThreshold()  # how different a pixel is from another
-picture_change_threshold = config.getImageChangeThreshold()  # percent difference for a picture to be considered changed
+pixel_diff_threshold = ConfigHelper.getPixelDiffThreshold()  # how different a pixel is from another
+picture_change_threshold = ConfigHelper.getImageChangeThreshold()  # percent difference for a picture to be considered changed
 
 
 def handle(msg):
