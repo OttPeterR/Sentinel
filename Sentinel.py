@@ -56,6 +56,7 @@ chat_refresh_frequency = 50  # milliseconds between each chat check
 image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
 
 # camera related parameters
+motion_watch = True
 photo_uploading_message = 'image is being uploaded...'
 motion_image_width = ConfigHelper.getResX()
 motion_image_height = ConfigHelper.getRexY()
@@ -75,18 +76,29 @@ def handle(msg):
 
 
 def handleMessage(msg):
+    global motion_watch
+
     chat_id = msg['chat']['id']
     command = msg['text']
     user_name = msg['from']['username']
+    args = command.split()[1:]
     if command[0] == '/':
+        command = command[1:]
         # print 'From: %s \tRecieved message: %s' % (user_name ,command)
 
-        if command == '/heartbeat':
+        if command == 'heartbeat':
             bot.sendMessage(chat_id, 'heartbeat')
-        elif command == '/pic':
+        elif command == 'pic':
             sendMostRecentPic()
-        elif command == '/whoshere':
+        elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
+        elif command.startswith('motion_watch'):
+            if args[0] == 'enable':
+                motion_watch = True
+            elif args[0] == 'disable':
+                motion_watch = False
+            else:
+                bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
 
 
 def validateUser(user_name):
@@ -129,9 +141,10 @@ def checkForMotion():
     global time_of_last_image
     global current_image_buffer
     global previous_image_buffer
+    global motion_watch
 
     # should we even refresh?
-    if not user_is_present:
+    if motion_watch and not user_is_present:
         current_time = int(round(time.time() * 1000))  # milliseconds
         # test if enough time has passed to check for motion
         motion_diff_time = current_time - time_of_last_image
