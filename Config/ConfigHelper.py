@@ -92,7 +92,7 @@ image = 'Image_Motion_Detection'
 
 
 def getImageRefreshFreq():
-    return int(configParser.get(image, 'image_refresh_freq'))
+    return float(configParser.get(image, 'image_refresh_freq'))
 
 
 def getResX():
