@@ -92,12 +92,15 @@ def handleMessage(msg):
         elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
         elif command.startswith('motion_watch'):
-            if args[0] == 'enable':
-                motion_watch = True
-            elif args[0] == 'disable':
-                motion_watch = False
-            else:
-                bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
+            if len(args) > 0:
+                if args[0] == 'enable':
+                    motion_watch = True
+                    bot.sendMessage(chat_id, "MotionWatch: enabled")
+                elif args[0] == 'disable':
+                    motion_watch = False
+                    bot.sendMessage(chat_id, "MotionWatch: disabled")
+                else:
+                    bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
 
 
 def validateUser(user_name):
