@@ -101,6 +101,8 @@ def handleMessage(msg):
                     bot.sendMessage(chat_id, "MotionWatch: disabled")
                 else:
                     bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
+            else:
+                bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
 
 
 def validateUser(user_name):
