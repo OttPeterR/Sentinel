@@ -91,6 +91,13 @@ def getUserPresentCooldown():
 image = 'Image_Motion_Detection'
 
 
+def getMotionWatch():
+    return configParser.get(image, 'motion_watch')
+
+
+def setMotionWatch(motion_watch):
+    configParser.set(image, 'motion_watch', motion_watch)
+
 def getImageRefreshFreq():
     return float(configParser.get(image, 'image_refresh_freq'))
 

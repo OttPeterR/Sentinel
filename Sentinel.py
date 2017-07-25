@@ -56,7 +56,6 @@ image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds
 
 # camera related parameters
 motion_watch = True
-photo_uploading_message = 'image is being uploaded...'
 motion_image_width = ConfigHelper.getResX()
 motion_image_height = ConfigHelper.getResX()
 time_of_last_image = 0
@@ -95,9 +94,11 @@ def handleMessage(msg):
             if len(args) > 0:
                 if args[0] == 'enable':
                     motion_watch = True
+                    ConfigHelper.setMotionWatch(True)
                     bot.sendMessage(chat_id, "MotionWatch: enabled")
                 elif args[0] == 'disable':
                     motion_watch = False
+                    ConfigHelper.setMotionWatch(False)
                     bot.sendMessage(chat_id, "MotionWatch: disabled")
                 else:
                     bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
@@ -201,9 +202,8 @@ def sendMostRecentPic():
 
 
 def sendPicFile(chat_id, photo_path):
-    global photo_uploading_message
     # save the photo to a file and pass in the file path
-    bot.sendMessage(chat_id, photo_uploading_message)
+    bot.sendMessage(chat_id, 'image is being uploaded...')
     bot.sendPhoto(chat_id, open(photo_path))
 
 
@@ -228,9 +228,9 @@ def userOnWiFiNetwork():
 ### --- this is a secret ID, do no share --- ###
 bot = telepot.Bot(ConfigHelper.getBotID())
 bot.message_loop(handle)
-print('%s is active...' % name)
+print('%s is online...' % name)
 print('  sending active message to %s' % approved_user)
-bot.sendMessage(approved_user_chat_id, 'powered on')
+bot.sendMessage(approved_user_chat_id, 'Sentinel: online')
 previous_image_buffer = takePic()
 # print 'powered on'
 
@@ -245,4 +245,5 @@ try:
         checkForMotion()
 except KeyboardInterrupt:
     print("\nSentinel - Keyboard Interrupt - Shutting down...\n")
+    bot.sendMessage(approved_user_chat_id, 'Sentinel: offline')
     os._exit(0)

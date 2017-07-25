@@ -26,6 +26,7 @@ def createDefaultConfig():
 
     image = 'Image_Motion_Detection'
     config.add_section(image)
+    config.set(image, 'motion_watch', 'True')
     config.set(image, 'image_refresh_freq', 0.5)
     config.set(image, 'res_x', 128)
     config.set(image, 'res_y', 72)
