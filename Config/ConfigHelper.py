@@ -92,7 +92,10 @@ image = 'Image_Motion_Detection'
 
 
 def getMotionWatch():
-    return configParser.get(image, 'motion_watch')
+    if (configParser.get(image, 'motion_watch') == 'True'):
+        return True
+    else:
+        return False
 
 
 def setMotionWatch(motion_watch):
