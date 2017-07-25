@@ -21,6 +21,7 @@
 #  pic - captures and sends a picture
 #  heartbeat - replies with 'heartbeat' if powered on
 #  whoshere - True if a recognized device is present, False otherwise
+#  motion_watch [enable, disable] - Controls the motion detection
 
 import io
 import os
