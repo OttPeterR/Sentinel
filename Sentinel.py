@@ -56,7 +56,7 @@ chat_refresh_frequency = 50  # milliseconds between each chat check
 image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
 
 # camera related parameters
-motion_watch = True
+motion_watch = ConfigHelper.getMotionWatch()
 motion_image_width = ConfigHelper.getResX()
 motion_image_height = ConfigHelper.getResX()
 time_of_last_image = 0
