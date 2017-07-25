@@ -222,18 +222,29 @@ def userOnWiFiNetwork():
 ###############################
 # cam = picamera.PiCamera()
 
+
+def startup():
+    global motion_watch
+    global bot
+    global approved_user_chat_id
+    global approved_user
+
+    bot = telepot.Bot(ConfigHelper.getBotID())
+    bot.message_loop(handle)
+    print('%s is online...' % name)
+    print('  sending active message to %s' % approved_user)
+
+    bot.sendMessage(approved_user_chat_id, 'Sentinel: online')
+    bot.sendMessage(approved_user_chat_id, "MotionWatch: %s" % motion_watch)
+
+    previous_image_buffer = takePic()
+    # print 'powered on'
+
+
 ############################
 ##### Handling the Bot #####
 ############################
-
-### --- this is a secret ID, do no share --- ###
-bot = telepot.Bot(ConfigHelper.getBotID())
-bot.message_loop(handle)
-print('%s is online...' % name)
-print('  sending active message to %s' % approved_user)
-bot.sendMessage(approved_user_chat_id, 'Sentinel: online')
-previous_image_buffer = takePic()
-# print 'powered on'
+startup()
 
 # lifecycle loop
 # with keyboard interrput exception handler
