@@ -115,6 +115,8 @@ def validateUser(user_name):
 # saves the buffer to a file then
 # returns the path to the file
 def imageBufferToFile(img_buffer):
+    if (img_buffer == 0):
+        img_buffer = takePic()
     # image = Image.open(img_buffer)
     now = datetime.now()
     filename = "capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
