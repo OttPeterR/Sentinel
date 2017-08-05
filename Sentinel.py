@@ -76,6 +76,7 @@ def handle(msg):
 
 def handleMessage(msg):
     global motion_watch
+    global current_image_buffer
 
     chat_id = msg['chat']['id']
     command = msg['text']
@@ -88,6 +89,7 @@ def handleMessage(msg):
         if command == 'heartbeat':
             bot.sendMessage(chat_id, 'heartbeat')
         elif command == 'pic':
+            current_image_buffer = takePic()
             sendMostRecentPic()
         elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
