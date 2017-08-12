@@ -28,9 +28,13 @@ import os
 import time
 from datetime import datetime
 
+# Raspberry PI specific imports
+# these imports may error when not on a pi, don't worry about it
 import picamera
-import telepot
 from PIL import Image
+
+# for telegram
+import telepot
 
 from Config import ConfigHelper
 
@@ -51,6 +55,7 @@ user_check_frequency = 1000 * ConfigHelper.getWiFiCheckFrequency()  # check ever
 user_is_present = False
 user_is_present_cooldown = 60000 * ConfigHelper.getUserPresentCooldown()  # wait x minutes before user is marked as gone
 user_last_seen_time = 0
+
 # chat parameters
 chat_refresh_frequency = 50  # milliseconds between each chat check
 image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
@@ -84,7 +89,8 @@ def handleMessage(msg):
     args = command.split()[1:]
     if command[0] == '/':
         command = command[1:]
-        # print 'From: %s \tRecieved message: %s' % (user_name ,command)
+        print
+        'From: %s \tRecieved message: %s' % (user_name, command)
 
         if command == 'heartbeat':
             bot.sendMessage(chat_id, 'heartbeat')
