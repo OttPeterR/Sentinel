@@ -63,7 +63,7 @@ image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds
 # camera related parameters
 motion_watch = ConfigHelper.getMotionWatch()
 motion_image_width = ConfigHelper.getResX()
-motion_image_height = ConfigHelper.getResX()
+motion_image_height = ConfigHelper.getResY()
 time_of_last_image = 0
 previous_image_buffer = 0
 current_image_buffer = 0
