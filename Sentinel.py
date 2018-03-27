@@ -48,7 +48,7 @@ local_IP = ConfigHelper.getWiFiAddress()
 # user parameters
 approved_user = ConfigHelper.getUser()
 approved_user_chat_id = ConfigHelper.getUserChatID()
-approved_local_MAC_addresses = [ConfigHelper.getUserMAC()]
+approved_local_MAC_addresses = ConfigHelper.getUserMAC()
 last_user_check_time = 0
 check_for_user_on_wifi = ConfigHelper.checkForUserOnWiFi()
 user_check_frequency = 1000 * ConfigHelper.getWiFiCheckFrequency()  # check every x seconds

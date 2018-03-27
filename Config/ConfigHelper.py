@@ -68,8 +68,8 @@ def getUserChatID():
     return [chat_id.strip() for chat_id in config_val.split(',')]
 
 def getUserMAC():
-    return configParser.get(user, 'user_MAC')
-
+    config_val = configParser.get(user, 'user_MAC')
+    return [mac.strip() for mac in config_val.split(',')]
 
 def checkForUserOnWiFi():
     return configParser.getboolean(user, 'check_for_user_on_wifi')
