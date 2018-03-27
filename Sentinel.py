@@ -77,7 +77,8 @@ picture_change_threshold = ConfigHelper.getImageChangeThreshold()  # percent dif
 def handle(msg):
     if validateUser(msg['from']['username']):
         handleMessage(msg)
-
+    else:
+        print("message from unknown sender: \n\tname: %s\n\tchat: %s" % (msg['from']['username'], msg['chat']['id']))
 
 def handleMessage(msg):
     global motion_watch
@@ -89,14 +90,14 @@ def handleMessage(msg):
     args = command.split()[1:]
     if command[0] == '/':
         command = command[1:]
-        print
-        'From: %s \tRecieved message: %s' % (user_name, command)
+        print('From: %s (%s)\n\t%s' % (user_name, chat_id, command))
 
         if command == 'heartbeat':
             bot.sendMessage(chat_id, 'heartbeat')
         elif command == 'pic':
-            current_image_buffer = takePic()
-            sendMostRecentPic()
+            if motion_watch is False:
+                current_image_buffer = takePic()
+            sendMostRecentPic(chat_id)
         elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
         elif command.startswith('motion_watch'):
@@ -117,7 +118,7 @@ def handleMessage(msg):
 
 def validateUser(user_name):
     global approved_user
-    return user_name == approved_user
+    return user_name in approved_user
 
 
 # saves the buffer to a file then
@@ -169,18 +170,22 @@ def checkForMotion():
             current_image_buffer = takePic()
             if previous_image_buffer != 0:
                 if areImagesDifferent(previous_image_buffer, current_image_buffer):
-                    sendMostRecentPic()
+                   for chat_id in approved_user_chat_id:   
+                       sendMostRecentPic(chat_id)
             time_of_last_image = current_time
             previous_image_buffer = current_image_buffer
 
 
 def takePic():
+    print("taking picture")
     stream = io.BytesIO()
     with picamera.PiCamera() as camera:
         camera.start_preview()
+        print(" capturing")
         camera.capture(stream, format='jpeg')
     stream.seek(0)
     img = Image.open(stream)
+    print(" done")
     return img
 
 
@@ -207,9 +212,9 @@ def checkIfUserIsPresent():
     return False
 
 
-def sendMostRecentPic():
+def sendMostRecentPic(chat_id):
     global current_image_buffer
-    sendPicFile(approved_user_chat_id, imageBufferToFile(current_image_buffer))
+    sendPicFile(chat_id, imageBufferToFile(current_image_buffer))
 
 
 def sendPicFile(chat_id, photo_path):
@@ -242,10 +247,12 @@ def startup():
     bot = telepot.Bot(ConfigHelper.getBotID())
     bot.message_loop(handle)
     print('%s is online...' % name)
-    print('  sending active message to %s' % approved_user)
 
-    bot.sendMessage(approved_user_chat_id, 'Sentinel: online')
-    bot.sendMessage(approved_user_chat_id, "MotionWatch: %s" % motion_watch)
+    for (user, chat_id) in zip(approved_user, approved_user_chat_id):
+        print('  sending active message to %s at %s' % (user, chat_id))
+        bot.sendMessage(chat_id, 'Sentinel: online')
+        #bot.sendMessage(chat_id, "MotionWatch: %s" % motion_watch)
+        print("message sent")
 
     previous_image_buffer = takePic()
     # print 'powered on'
@@ -267,5 +274,6 @@ try:
         checkForMotion()
 except KeyboardInterrupt:
     print("\nSentinel - Keyboard Interrupt - Shutting down...\n")
-    bot.sendMessage(approved_user_chat_id, 'Sentinel: offline')
+    for chat_id in approved_user_chat_id:
+        bot.sendMessage(chat_id, 'Sentinel: offline')
     os._exit(0)

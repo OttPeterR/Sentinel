@@ -60,12 +60,12 @@ user = 'Designated_User'
 
 
 def getUser():
-    return configParser.get(user, 'designated_user')
-
+    config_val = configParser.get(user, 'designated_user')
+    return [user_name.strip() for user_name in config_val.split(',')]
 
 def getUserChatID():
-    return configParser.get(user, 'user_chat_id')
-
+    config_val = configParser.get(user, 'user_chat_id')
+    return [chat_id.strip() for chat_id in config_val.split(',')]
 
 def getUserMAC():
     return configParser.get(user, 'user_MAC')
