@@ -248,11 +248,11 @@ def startup():
     bot.message_loop(handle)
     print('%s is online...' % name)
 
-    for (user, chat_id) in zip(approved_user, approved_user_chat_id):
-        print('  sending active message to %s at %s' % (user, chat_id))
-        bot.sendMessage(chat_id, 'Sentinel: online')
-        #bot.sendMessage(chat_id, "MotionWatch: %s" % motion_watch)
-        print("message sent")
+    #for (user, chat_id) in zip(approved_user, approved_user_chat_id):
+    #    print('  sending active message to %s at %s' % (user, chat_id))
+    #    bot.sendMessage(chat_id, 'Sentinel: online')
+    #    #bot.sendMessage(chat_id, "MotionWatch: %s" % motion_watch)
+    #    print("message sent")
 
     previous_image_buffer = takePic()
     # print 'powered on'
@@ -274,6 +274,6 @@ try:
         checkForMotion()
 except KeyboardInterrupt:
     print("\nSentinel - Keyboard Interrupt - Shutting down...\n")
-    for chat_id in approved_user_chat_id:
-        bot.sendMessage(chat_id, 'Sentinel: offline')
+    #for chat_id in approved_user_chat_id:
+        #bot.sendMessage(chat_id, 'Sentinel: offline')
     os._exit(0)
