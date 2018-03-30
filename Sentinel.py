@@ -100,6 +100,11 @@ def handleMessage(msg):
             sendMostRecentPic(chat_id)
         elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
+#!/bin/bash
+#!/bin/bash
+#!/bin/bash
+#!/bin/bash
+#!/bin/bash
         elif command.startswith('motion_watch'):
             if len(args) > 0:
                 if args[0] == 'enable':
@@ -113,8 +118,7 @@ def handleMessage(msg):
                 else:
                     bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
             else:
-                bot.sendMessage(chat_id, "Please use **enable** or **disable** to control MotionWatch.")
-
+                bot.sendMessage(chat_id, "MotionWatch: " + str(motion_watch))
 
 def validateUser(user_name):
     global approved_user
@@ -169,9 +173,12 @@ def checkForMotion():
             # time to refresh
             current_image_buffer = takePic()
             if previous_image_buffer != 0:
-                if areImagesDifferent(previous_image_buffer, current_image_buffer):
-                   for chat_id in approved_user_chat_id:   
-                       sendMostRecentPic(chat_id)
+                try:
+                    if areImagesDifferent(previous_image_buffer, current_image_buffer):
+                        for chat_id in approved_user_chat_id:   
+                            sendMostRecentPic(chat_id)
+                except(IOError):
+                    bot.sendMessage(chat_id, "image error, please try again")
             time_of_last_image = current_time
             previous_image_buffer = current_image_buffer
 
