@@ -64,6 +64,8 @@ image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds
 camera = PiCamera()
 camera.framerate = ConfigHelper.getFPS()
 motion_watch = ConfigHelper.getMotionWatch()
+if(motion_watch):
+    time.sleep(2)  #let the camera warm up so it doesnt send an image right away
 motion_image_width = ConfigHelper.getResX()
 motion_image_height = ConfigHelper.getResY()
 camera.resolution = (motion_image_width, motion_image_height)
@@ -135,7 +137,7 @@ def imageBufferToFile(img_buffer):
         img_buffer = takePic()
     # image = Image.open(img_buffer)
     now = datetime.now()
-    filename = "Captures/capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
+    filename = "Images/capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
         now.year, now.month, now.day, now.hour, now.minute, now.second)
     img_buffer.save(filename)
     return filename
