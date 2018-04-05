@@ -30,7 +30,7 @@ from datetime import datetime
 
 # Raspberry PI specific imports
 # these imports may error when not on a pi, don't worry about it
-import picamera
+from picamera import PiCamera
 from PIL import Image
 
 # for telegram
@@ -61,9 +61,12 @@ chat_refresh_frequency = 50  # milliseconds between each chat check
 image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
 
 # camera related parameters
+camera = PiCamera()
+camera.framerate = ConfigHelper.getFPS()
 motion_watch = ConfigHelper.getMotionWatch()
 motion_image_width = ConfigHelper.getResX()
 motion_image_height = ConfigHelper.getResY()
+camera.resolution = (motion_image_width, motion_image_height)
 time_of_last_image = 0
 previous_image_buffer = 0
 current_image_buffer = 0
@@ -188,10 +191,9 @@ def checkForMotion():
 def takePic():
     print("taking picture")
     stream = io.BytesIO()
-    with picamera.PiCamera() as camera:
-        camera.start_preview()
-        print(" capturing")
-        camera.capture(stream, format='jpeg')
+    camera.start_preview()
+    print(" capturing")
+    camera.capture(stream, format='jpeg')
     stream.seek(0)
     img = Image.open(stream)
     print(" done")
@@ -244,7 +246,6 @@ def userOnWiFiNetwork():
 ###############################
 ##### Handling the Camera #####
 ###############################
-# cam = picamera.PiCamera()
 
 
 def startup():
