@@ -33,6 +33,7 @@ def createDefaultConfig():
     config.set(image, 'detect_if_user_present', False)
     config.set(image, 'pixel_diff_threshold', 15)
     config.set(image, 'image_change_threshold', 5)
+    config.set(image, 'fps', 10)
 
     config.write(file)
 

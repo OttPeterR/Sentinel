@@ -123,3 +123,6 @@ def getPixelDiffThreshold():
 
 def getImageChangeThreshold():
     return float(configParser.get(image, 'image_change_threshold'))
+
+def getFPS():
+    return int(configParser.get(image, 'fps))
