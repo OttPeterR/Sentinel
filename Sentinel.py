@@ -137,7 +137,7 @@ def imageBufferToFile(img_buffer):
         img_buffer = takePic()
     # image = Image.open(img_buffer)
     now = datetime.now()
-    filename = "Images/capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
+    filename = "Images/capture-%04d%02d%02d-%02d%02d%02d.png" % (
         now.year, now.month, now.day, now.hour, now.minute, now.second)
     img_buffer.save(filename)
     return filename
@@ -195,7 +195,7 @@ def takePic():
     stream = io.BytesIO()
     camera.start_preview()
     print(" capturing")
-    camera.capture(stream, format='jpeg')
+    camera.capture(stream, format='png')
     stream.seek(0)
     img = Image.open(stream)
     print(" done")
