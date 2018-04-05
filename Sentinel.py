@@ -135,7 +135,7 @@ def imageBufferToFile(img_buffer):
         img_buffer = takePic()
     # image = Image.open(img_buffer)
     now = datetime.now()
-    filename = "capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
+    filename = "Captures/capture-%04d%02d%02d-%02d%02d%02d.jpg" % (
         now.year, now.month, now.day, now.hour, now.minute, now.second)
     img_buffer.save(filename)
     return filename
