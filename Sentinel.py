@@ -176,7 +176,9 @@ def checkForMotion():
                 try:
                     if areImagesDifferent(previous_image_buffer, current_image_buffer):
                         for chat_id in approved_user_chat_id:   
-                            sendMostRecentPic(chat_id)
+                             bot.sendMessage(chat_id, "Motion detected.")
+                             #sendPicFile(chat_id, imageBufferToFile(previous_image_buffer))
+                             sendMostRecentPic(chat_id)
                 except(IOError):
                     bot.sendMessage(chat_id, "image error, please try again")
             time_of_last_image = current_time
