@@ -28,6 +28,7 @@ motionCounter = 0
 print "[INFO] ready."
 # capture frames from the camera
 for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+	print("frame")
 	# grab the raw NumPy array representing the image and initialize
 	# the timestamp and occupied/unoccupied text
 	frame = f.array
@@ -57,13 +58,15 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	thresh = cv2.threshold(frameDelta, conf["delta_thresh"], 255,
 		cv2.THRESH_BINARY)[1]
 	thresh = cv2.dilate(thresh, None, iterations=2)
-	(cnts, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-		cv2.CHAIN_APPROX_SIMPLE)
-
+	# image, cnts, heirarchy
+	_, cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+	#print(cnts)
 	# loop over the contours
 	for c in cnts:
 		# if the contour is too small, ignore it
-		if cv2.contourArea(c) < conf["min_area"]:
+		area = cv2.contourArea(c)
+		min_area = ((conf["min_area_percent"]/100.0)*conf["res_x"]*conf["res_y"])
+		if area < min_area:
 			continue
 
 		# compute the bounding box for the contour, draw it on the frame,
@@ -89,17 +92,7 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 			# check to see if the number of frames with consistent motion is
 			# high enough
 			if motionCounter >= conf["min_motion_frames"]:
-				# check to see if dropbox sohuld be used
-				if conf["use_dropbox"]:
-					# write the image to temporary file
-					t = TempImage()
-					cv2.imwrite(t.path, frame)
-
-					# upload the image to Dropbox and cleanup the tempory image
-					print "[UPLOAD] {}".format(ts)
-					path = "/{timestamp}.jpg".format(timestamp=ts) # changed the path input
-					client.put_file(path, open(t.path, "rb"))
-					t.cleanup()
+				# this is where a telegram message would be sent
 
 				# update the last uploaded timestamp and reset the motion
 				# counter
@@ -109,16 +102,6 @@ for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True
 	# otherwise, the room is not occupied
 	else:
 		motionCounter = 0
-
-	# check to see if the frames should be displayed to screen
-	if conf["show_video"]:
-		# display the security feed
-		cv2.imshow("Security Feed", frame)
-		key = cv2.waitKey(1) & 0xFF
-
-		# if the `q` key is pressed, break from the lop
-		if key == ord("q"):
-			break
 
 	# clear the stream in preparation for the next frame
 	rawCapture.truncate(0)

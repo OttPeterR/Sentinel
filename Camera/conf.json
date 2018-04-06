@@ -4,5 +4,5 @@
 	"res_x": 640, 
 	"res_y": 480,
 	"fps": 16,
-	"min_area": 5000
+	"min_area_percent": 10.0
 }
