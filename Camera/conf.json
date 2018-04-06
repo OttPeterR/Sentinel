@@ -4,5 +4,7 @@
 	"res_x": 640, 
 	"res_y": 480,
 	"fps": 16,
-	"min_area_percent": 10.0
+	"min_motion_frames": 1,
+	"min_upload_seconds": 0.5,
+	"min_area_percent": 0
 }
