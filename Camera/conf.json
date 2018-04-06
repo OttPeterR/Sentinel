@@ -2,9 +2,9 @@
 	"camera_warmup_time": 2.5,
 	"delta_thresh": 5,
 	"res_x": 640, 
-	"res_y": 480,
-	"fps": 16,
+	"res_y": 512,
+	"fps": 15,
 	"min_motion_frames": 1,
-	"min_upload_seconds": 0.5,
-	"min_area_percent": 0
+	"min_upload_seconds": 0.1,
+	"min_area_percent": 10
 }
