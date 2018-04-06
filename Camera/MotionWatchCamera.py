@@ -14,9 +14,13 @@ import os
 requestImage = False
 
 def requestImage():
+	global requestImage
 	requestImage=True
 
 def beginWatching(notifyUserFunc=None, imageRequestResponseFunc=None):
+	global requestImage
+	if requestImage is None:
+		requestImage=False
 	conf = json.load(open("conf.json"))
 
 	#initialize the camera and grab a reference to the raw camera capture
