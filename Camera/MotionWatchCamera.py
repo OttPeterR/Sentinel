@@ -11,7 +11,12 @@ import os
 # lots of credit to:
 # https://github.com/levybooth/pi_surveillance_auth/blob/master/pi_surveillance_auth.py
 
-def beginWatching(notifyUserFunc=None):
+requestImage = False
+
+def requestImage():
+	requestImage=True
+
+def beginWatching(notifyUserFunc=None, imageRequestResponseFunc=None):
 	conf = json.load(open("conf.json"))
 
 	#initialize the camera and grab a reference to the raw camera capture
@@ -119,7 +124,13 @@ def beginWatching(notifyUserFunc=None):
 		else:
 			motionCounter = 0
 		print("frame: "+str(timestamp)+" status: "+text)
-
+		
+		# handle when an image is requested
+		if(requestImage and imageRequestResponseFunc is not None):
+			requestImage=False
+			t = TempImage()
+			cv2.imwrite(t.path, frame)
+			imageRequestResponseFunc(t.path)
 		# clear the stream in preparation for the next frame
 		rawCapture.truncate(0)
 
