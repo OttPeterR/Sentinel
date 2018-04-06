@@ -29,6 +29,13 @@ def beginWatching(notifyUserFunc=None):
 	motionCounter = 0
 	print "[INFO] ready."
 	
+	#init other vars
+	test = ""
+	frame = None
+	gray = None
+	timestamp = None
+	
+
 	# capture frames from the camera
 	for f in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
 		# grab the raw NumPy array representing the image and initialize
@@ -64,7 +71,6 @@ def beginWatching(notifyUserFunc=None):
 		_, cnts, _ = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 	
 		# loop over the contours
-		text = "Occupied"
 		for c in cnts:
 			# if the contour is too small, ignore it
 			area = cv2.contourArea(c)
@@ -112,7 +118,8 @@ def beginWatching(notifyUserFunc=None):
 		# otherwise, the room is not occupied
 		else:
 			motionCounter = 0
-	
+		print("frame: "+str(timestamp)+" status: "+text)
+
 		# clear the stream in preparation for the next frame
 		rawCapture.truncate(0)
 
