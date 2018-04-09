@@ -15,12 +15,13 @@ def requestPic():
 @app.route(base+'/motionWatch')
 def motionWatch():
 	status = request.args.get('status')
-	if status == True:
+	if status == 'True':
 		# FIXME
-		pass
-	elif status == False:
+		return "set to True"
+	elif status == 'False':
 		# FIXME
-		pass
+		return "set to False"
 	else:
 		# FIXME
-		pass
+		return "error"
+
