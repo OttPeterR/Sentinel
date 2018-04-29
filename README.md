@@ -6,6 +6,8 @@ The Raspberry Pi Telegram Bot that keeps watch on your home.
 1. Clone this git repo onto your Raspberry Pi.
 1. Register a new Telegram bot through the @BotFather Telegram bot.
  1. Put the new bots api key into the Sentinel config file.
+1. Install dependencies **work in progress**
+ 1. This might help: https://www.pyimagesearch.com/2015/07/27/installing-opencv-3-0-for-both-python-2-7-and-python-3-on-your-raspberry-pi-2/
 1. Run Sentinel: `python Sentinel.py` and message the bot. You will need to retrieve your chat ID from the console.
  1. You guessed it: put that into the config file as well as your Telegram user name.
  1. You can add multiple users this way.
