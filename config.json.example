@@ -3,12 +3,12 @@
 	"designated_users": [],
 	"user_chat_id": [],
 	
-	"camera_warm_up": 3
+	"camera_warm_up": 3,
 	"fps": 15,
 	"res": [1200,900],
 
 	"min_record_seconds": 2.5,	
 	"frame_threshold_count": 3,
 	"delta_thresh": 5,
-	"min_area_percent": 1.5,
+	"min_area_percent": 1.5
 }
