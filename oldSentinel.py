@@ -57,7 +57,7 @@ user_is_present_cooldown = 60000 * ConfigHelper.getUserPresentCooldown()  # wait
 user_last_seen_time = 0
 
 # chat parameters
-chat_refresh_frequency = 50  # milliseconds between each chat check
+chat_refresh_frequency = 500  # milliseconds between each chat check
 image_refresh_frequency = 1000 * ConfigHelper.getImageRefreshFreq()  # x seconds per image check
 
 # camera related parameters
@@ -105,11 +105,6 @@ def handleMessage(msg):
             sendMostRecentPic(chat_id)
         elif command == 'whoshere':
             bot.sendMessage(chat_id, user_is_present)
-#!/bin/bash
-#!/bin/bash
-#!/bin/bash
-#!/bin/bash
-#!/bin/bash
         elif command.startswith('motion_watch'):
             if len(args) > 0:
                 if args[0] == 'enable':
@@ -150,18 +145,21 @@ def areImagesDifferent(image_buffer1, image_buffer2):
     diff = 0
     # loop through x and y of both images
     # stride - optimize the image diff checking
-    stride = 4
-    for x in range(0, motion_image_width, stride):
-        for y in range(0, motion_image_height, stride):
+    stride_x = 15
+    stride_y = 15
+    pixel_count = 0
+    for x in range(0, motion_image_width, stride_x):
+        for y in range(0, motion_image_height, stride_y):
             # check the green channel, (with [1]) because it's the most clear
+            pixel_count += 1
             diff = abs(image_buffer1.getpixel((x, y))[1] - image_buffer2.getpixel((x, y))[1])
             if diff >= pixel_diff_threshold:
                 current_pixels_changed += 1
     resolution = motion_image_width * motion_image_height
-    percentage_changed = (100.0 * current_pixels_changed*(stride**2)) / resolution
+    percentage_changed = (100.0 * current_pixels_changed) / pixel_count
 
     # True if there were enough changed pixels
-    print('  changed pixels: ' + str(current_pixels_changed) + ', changed percent: ' + str(percentage_changed))
+    print(str(round(time.time(), 2))+' - changed pixels: ' + str(current_pixels_changed) + ', changed percent: ' + str(percentage_changed))
     return percentage_changed >= picture_change_threshold
 
 
@@ -181,28 +179,31 @@ def checkForMotion():
             current_image_buffer = takePic()
             if previous_image_buffer != 0:
                 try:
-                    print("  checking images diff")
+                    #print("  checking images diff")
                     if areImagesDifferent(previous_image_buffer, current_image_buffer):
                         for chat_id in approved_user_chat_id:   
-                             bot.sendMessage(chat_id, "Motion detected.")
+                             #bot.sendMessage(chat_id, "Motion detected.")
                              #sendPicFile(chat_id, imageBufferToFile(previous_image_buffer))
                              sendMostRecentPic(chat_id)
                 except(IOError):
-                    bot.sendMessage(chat_id, "image error, please try again")
+                    print("image error")
+              # bot.sendMessage(chat_id, "image error, please try again")
             time_of_last_image = current_time
             previous_image_buffer = current_image_buffer
+        # else:
+            # print("waiting to take pic")
 
-
-def takePic():
-    print("taking picture")
+def takePic(quality=50):
+    #print(str(round(time.time(), 2))+" taking picture")
     stream = io.BytesIO()
-    #camera.start_preview()
-    print(" capturing")
-    camera.capture(stream, format='jpeg', quality=75, thumbnail=None, bayer=False)
+    #print(" capturing")
+    camera.capture(stream, format='jpeg', quality=quality, thumbnail=None, bayer=False, use_video_port=True)
     stream.seek(0)
     img = Image.open(stream)
-    print(" done")
+    #print(str(round(time.time(), 2))+" done")
     return img
+
+
 
 
 def checkIfUserIsPresent():
@@ -235,7 +236,7 @@ def sendMostRecentPic(chat_id):
 
 def sendPicFile(chat_id, photo_path):
     # save the photo to a file and pass in the file path
-    bot.sendMessage(chat_id, 'image is being uploaded...')
+    #bot.sendMessage(chat_id, 'image is being uploaded...')
     bot.sendPhoto(chat_id, open(photo_path))
 
 
