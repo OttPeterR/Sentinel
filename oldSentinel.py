@@ -27,6 +27,7 @@ import io
 import os
 import time
 from datetime import datetime
+import threading
 
 # Raspberry PI specific imports
 # these imports may error when not on a pi, don't worry about it
@@ -193,15 +194,18 @@ def checkForMotion():
         # else:
             # print("waiting to take pic")
 
+pic_lock = threading.Lock()
+
 def takePic(quality=50):
-    #print(str(round(time.time(), 2))+" taking picture")
-    stream = io.BytesIO()
-    #print(" capturing")
-    camera.capture(stream, format='jpeg', quality=quality, thumbnail=None, bayer=False, use_video_port=True)
-    stream.seek(0)
-    img = Image.open(stream)
-    #print(str(round(time.time(), 2))+" done")
-    return img
+    with pic_lock:
+        #print(str(round(time.time(), 2))+" taking picture")
+        stream = io.BytesIO()
+        #print(" capturing")
+        camera.capture(stream, format='jpeg', quality=quality, thumbnail=None, bayer=False, use_video_port=True)
+        stream.seek(0)
+        img = Image.open(stream)
+        #print(str(round(time.time(), 2))+" done")
+        return img
 
 
 
