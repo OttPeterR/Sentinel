@@ -1,0 +1,9 @@
+{
+    "Users":{
+        "TelegramBotDemoUser": {
+            "LoggedIn": false,
+            "Notify": false,
+            "ChatID": "unknown"
+        }    
+    }
+}
