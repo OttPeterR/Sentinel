@@ -2,6 +2,8 @@ __init__.py
 
 venv/
 
+.*
+
 *.cfg
 
 *.xml
