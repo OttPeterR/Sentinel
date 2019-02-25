@@ -16,9 +16,9 @@ def load_config():
     print_status("Config Loaded")
     return config_json
 
-def init_telegram(telegram_bot_config):
+def init_telegram(telegram_bot_config, camera):
     # obtain the raspi camera resource
-    telegram_bot = telegramBot.init_bot(telegram_bot_config)
+    telegram_bot = telegramBot.init_bot(telegram_bot_config, camera)
     # return False if any issue
     if telegram_bot is None or telegram_bot is False:
         print_status("! Telegram Bot Init Failure")
@@ -51,8 +51,8 @@ class Sentinel:
         config = load_config()
 
         # init bot and camera    
-        self.telegram_bot = init_telegram(config['TelegramBot'])
         self.camera = init_camera(config['Camera'])
+        self.telegram_bot = init_telegram(config['TelegramBot'], self.camera)
 
         # check that init was successful
         if(not(self.telegram_bot and self.camera)):
@@ -71,6 +71,7 @@ class Sentinel:
 
     def run(self):
         startup_status = self.startup()
+        print_status("Bot Is Active")
         if startup_status:
             try:
                 while self.telegram_bot.is_running():
