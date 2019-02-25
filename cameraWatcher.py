@@ -13,3 +13,7 @@ class Camera:
 
     def start_watching(self):
         self.start_watching = True
+
+    def toggle(self):
+        self.is_watching = not self.is_watching
+        return self.is_watching
