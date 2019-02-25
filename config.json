@@ -1,7 +1,8 @@
 {
     "TelegramBot": {
-        "Token": "your-token-here",
-        "Password": "pick-a-password"
+        "Token": "",
+        "Password": "CHANGE-THIS-PASSWORD",
+        "LoginAttemptLimit": 5
     },
     "Camera": {
 
