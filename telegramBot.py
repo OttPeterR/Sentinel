@@ -18,6 +18,7 @@ class Bot:
         self._password = config["Password"]
         self._loginAttemptLimit = config["LoginAttemptLimit"]
         self._is_running = True
+        self._logged_in_users = self.get_logged_in_users()
 
         # set camera
         self.camera = camera
@@ -58,20 +59,19 @@ class Bot:
         bot.send_message(chat_id=update.message.chat_id, text=auth_message)
 
     # user auth's with the password
-    # most of the actual work is done in check_auth
+    # most of the actual work is done in check_login_status and validate_password
     def password(self, bot, update):
         users_json = None
-        with open("users.json", 'r') as users_file:
-            users_json = json.load(users_file)
-            auth_status, users_json = self.check_auth(users_json, bot, update)
-            if auth_status:
-                bot.send_message(chat_id=update.message.chat_id, text="Authentication Successful.")
-            #write file in case of any changes
-        
-        # save config file
-        with open("users.json", 'w') as users_file:
-            json.dump(users_json, users_file)
-
+        users_json = self.get_users_json()
+        auth_status = self.check_login_status(bot, update)
+        # check if they are already logged in
+        if auth_status:
+            bot.send_message(chat_id=update.message.chat_id, text="You are already logged in.")
+            return 
+        # check password
+        else:
+            auth_status = self.validate_password(bot, update)
+    
     def toggle(self, bot, update):
         status = self.camera.toggle()
         status = "camera is %s" % ("watching" if status else "not watching")
@@ -82,18 +82,20 @@ class Bot:
         return 
 
     def filter_text(self, bot, update):
-        # check for auth
-        #0
+        
         return
 
 
     #### Helpers ####   
-
-    def check_auth(self, users, bot, update):
+    # return true or false if the user is or is not authenticated yet
+    def check_login_status(self, bot, update):
         user = update.message.chat.username
-
+        users = self.get_users_json()
+        # is already logged in
+        if users is not None and user in users and users[user]["LoggedIn"]:
+            return True
         # make a new user profile if needed
-        if not users or user not in users:
+        elif not users or user not in users:
             print_status("New user: %s has been added." % user)
             users[user] = {
                 "LoggedIn": False,
@@ -102,13 +104,12 @@ class Bot:
                 "Notify": False,
                 "ChatID": update.message.chat_id
             }
-        # check if user needs auth
-        elif users[user]["Blocked"]:
-            return False, users
-        elif users[user]["LoggedIn"]:
-            status = "You are already logged in."
-            bot.send_message(chat_id=update.message.chat_id, text=status)
-            return True, users
+            self.save_users_json(users)
+        return False
+
+    def validate_password(self, bot, update):
+        user = update.message.chat.username
+        users = self.get_users_json()
 
         # check for password
         input_password = update.message.text[(len('/password ')):]
@@ -121,7 +122,8 @@ class Bot:
             users[user]["LoggedIn"]=True
             users[user]["LoginAttempts"]=0
             users[user]["Blocked"]=False
-            return True, users
+            self.save_users_json(users)
+            return True
 
         # incorrect password
         else:
@@ -131,9 +133,32 @@ class Bot:
                 users[user]["Blocked"] = True
                 status = "Incorrect password, you have been blocked. Goodbye."
                 bot.send_message(chat_id=update.message.chat_id, text=status)
-                return False, users
+                self.save_users_json(users)
+                return False
             else:
                 remaining_attempts = self._loginAttemptLimit - users[user]['LoginAttempts']
                 status = "Incorrect password, please try again. Remaining attempts: %d" % remaining_attempts
                 bot.send_message(chat_id=update.message.chat_id, text=status)
-                return False, users
+                self.save_users_json(users)
+                return False
+
+
+    def get_users_json(self):
+        with open("users.json", 'r') as users_file:
+            users_json = json.load(users_file)
+            return users_json
+
+    def save_users_json(self, users_json):
+        with open("users.json", 'w') as users_file:
+            json.dump(users_json, users_file)
+
+    def get_logged_in_users(self):
+        users_json = self.get_users_json()
+        if users_json is None:
+            return []
+        else:
+            logged_in_users = []
+            for user in users_json:
+                if users_json[user]["LoggedIn"]:
+                    logged_in_users.append(user)
+            return logged_in_users
