@@ -1,0 +1,15 @@
+{
+    "TelegramBot": {
+        "Token": "",
+        "Password": "",
+        "LoginAttemptLimit": 5
+    },
+    "Camera": {
+
+        "Framerate": 10,
+        "ResX": 1200,
+        "ResY": 900,
+        "RGBChangeThreshold": 20,
+        "ImageChangePercentage": 0.5
+    }
+}
