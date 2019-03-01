@@ -1,5 +1,9 @@
 import json
 
+def print_status(message):
+    print("[Sentinel]: %s" % str(message))
+
+
 def get_login_status(update):
     user = update.message.chat.username
     users = get_users_json()
@@ -25,7 +29,6 @@ def validate_password(bot, update, config):
 
     # check for password
     input_password = update.message.text[(len('/password ')):]
-    print_status("%s inputted %s as password" % (user, input_password))
     
     # correct password 
     if input_password == config["Password"]:
@@ -35,33 +38,38 @@ def validate_password(bot, update, config):
         users[user]["LoginAttempts"]=0
         users[user]["Blocked"]=False
         save_users_json(users)
+        print_status("%s inputted the correct password" % user)
         return True
 
     # incorrect password
     else:
         users[user]["LoginAttempts"] += 1
+        print_status("%s inputted an incorrect password" % user)
+
         # check if block limit is hit
         if users[user]["LoginAttempts"] == config["LoginAttemptsLimit"]:
             users[user]["Blocked"] = True
             status = "Incorrect password, you have been blocked. Goodbye."
             bot.send_message(chat_id=update.message.chat_id, text=status)
             save_users_json(users)
+            print_status("%s is now blocked" % user)
             return False
         else:
             remaining_attempts = config["LoginAttemptsLimit"] - users[user]['LoginAttempts']
             status = "Incorrect password, please try again. Remaining attempts: %d" % remaining_attempts
             bot.send_message(chat_id=update.message.chat_id, text=status)
             save_users_json(users)
+            print_status("%s has %d remaining password attempts" % (user, remaining_attempts))
             return False
 
 
 def get_users_json():
-    with open("users.json", 'r') as users_file:
+    with open("config/users.json", 'r') as users_file:
         users_json = json.load(users_file)
         return users_json
 
 def save_users_json(users_json):
-    with open("users.json", 'w') as users_file:
+    with open("config/users.json", 'w') as users_file:
         json.dump(users_json, users_file)
 
 def get_logged_in_users():

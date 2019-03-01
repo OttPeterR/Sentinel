@@ -11,7 +11,7 @@ def print_status(message):
     print("[Sentinel]: %s" % str(message))
 
 def load_config():
-    config_file = open("config.json")
+    config_file = open("config/config.json")
     config_json = json.load(config_file)
     print_status("Config Loaded")
     return config_json
