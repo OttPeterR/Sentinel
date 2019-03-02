@@ -3,8 +3,8 @@ from time import sleep
 import json
 
 # my stuff
-import telegramBot
-from camera import cameraWatcher
+import telegram_bot
+from camera import camera_watcher
 
 
 def print_status(message):
@@ -18,18 +18,18 @@ def load_config():
 
 def init_telegram(telegram_bot_config, camera):
     # obtain the raspi camera resource
-    telegram_bot = telegramBot.init_bot(telegram_bot_config, camera)
+    bot = telegram_bot.init_bot(telegram_bot_config, camera)
     # return False if any issue
-    if telegram_bot is None or telegram_bot is False:
+    if bot is None or bot is False:
         print_status("! Telegram Bot Init Failure")
         return None
     else:
         print_status("Telegram Bot Online")
-        return telegram_bot
+        return bot
 
 def init_camera(camera_config):
     # obtain the raspi camera resource
-    camera = cameraWatcher.init_camera(camera_config)
+    camera = camera_watcher.init_camera(camera_config)
     # return False if any issue
     if camera is None or camera is False:
         print_status("! Camera Init Failure")
