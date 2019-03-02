@@ -1,5 +1,7 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 import authentication
+from handlers import password_handler
 
 def init_bot(config, camera):
     return Bot(config, camera)
@@ -27,13 +29,15 @@ class Bot:
 
 
     def setup_handlers(self):
+        print_status("Binding Commands...")
+
         # # /start
         start_handler = CommandHandler('start', self.start)
         self.dispatcher.add_handler(start_handler)
         # self.add_command_handler('start', self.start)
 
         # # /password
-        self.add_command_handler('password', self.password)
+        self.add_command_handler('password', password_handler.password)
 
         # # /toggle
         self.add_command_handler('toggle', self.toggle)
@@ -41,22 +45,33 @@ class Bot:
         # # catch-all for any text
         self.add_message_handler(Filters.text, self.filter_text)
 
-    def add_command_handler(self, command, handler_func):
+        print_status("Command Binding Complete")
+
+
+    def add_command_handler(self, command_string, handler_func):
         # wrapping the function with an auth check
+        print_status("Command initialized: /%s" % command_string)
         def wrapped_handler_func(bot, update):
+            user = update.message.chat.username
+            message = update.message.text
+            print_status("function call from: %s: %s" % (user, message))
             auth_status = authentication.get_login_status(update)    
             if auth_status:
-                self.handler_func(bot, update)
+                handler_func(bot, update)
         # attaching the function
-        handler_obj = CommandHandler(command, wrapped_handler_func)
+        handler_obj = CommandHandler(command_string, wrapped_handler_func)
         self.dispatcher.add_handler(handler_obj)
 
     def add_message_handler(self, message_filter, handler_func):
         # wrapping the function with an auth check
+        print_status("Command initialized: Text Handling")
         def wrapped_handler_func(bot, update):
+            user = update.message.chat.username
+            message = update.message.text
+            print_status("message recieved from user: %s: %s" % (user, message))
             auth_status = authentication.get_login_status(update)    
             if auth_status:
-                self.handler_func(bot, update)
+                handler_func(bot, update)
         # attaching the function
         handler_obj = MessageHandler(message_filter, wrapped_handler_func)
         self.dispatcher.add_handler(handler_obj)
