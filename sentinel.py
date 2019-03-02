@@ -4,7 +4,7 @@ import json
 
 # my stuff
 import telegramBot
-import cameraWatcher
+from camera import cameraWatcher
 
 
 def print_status(message):
@@ -74,7 +74,7 @@ class Sentinel:
         print_status("Bot Is Active")
         if startup_status:
             try:
-                while self.telegram_bot.is_running():
+                while True:
                     sleep(0.2) 
                     # check for telegram messages
                     # 
