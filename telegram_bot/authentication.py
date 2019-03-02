@@ -32,7 +32,6 @@ def validate_password(bot, update):
     input_password = update.message.text[(len('/password ')):]
     # check for blocked status
     if users[user]["LoginAttempts"]+1 >= config["LoginAttemptLimit"]:
-        print("blocked")
         status = "You have been blocked."
         bot.send_message(chat_id=update.message.chat_id, text=status)
 
@@ -43,7 +42,6 @@ def validate_password(bot, update):
     # correct password 
 
     if input_password == config["Password"] and not users[user]["Blocked"]:
-        print("corret password")
         status = "Authentication Successful. Welcome, %s" % user
         bot.send_message(chat_id=update.message.chat_id, text=status)
         
@@ -56,7 +54,6 @@ def validate_password(bot, update):
 
     # incorrect password
     else:
-        print("incorrect password")
         users[user]["LoginAttempts"] += 1
         print_status("%s inputted an incorrect password" % user)
         remaining_attempts = config["LoginAttemptLimit"] - users[user]['LoginAttempts']
@@ -67,8 +64,6 @@ def validate_password(bot, update):
         save_users_json(users)
         print_status("%s has %d remaining password attempts" % (user, remaining_attempts))
         return False
-
-    print("WAT")
     return False
 
 def get_users_json():
