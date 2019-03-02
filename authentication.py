@@ -26,12 +26,19 @@ def get_login_status(update):
 def validate_password(bot, update, config):
     user = update.message.chat.username
     users = get_users_json()
-
-    # check for password
     input_password = update.message.text[(len('/password ')):]
     
+    # check for blocked status
+    if users[user]["LoginAttempts"]+1 >= config["LoginAttemptLimit"]:
+        users[user]["Blocked"] = True
+        status = "You have been blocked."
+        bot.send_message(chat_id=update.message.chat_id, text=status)
+        save_users_json(users)
+        print_status("%s is now blocked" % user)
+        return False
     # correct password 
-    if input_password == config["Password"]:
+
+    elif input_password == config["Password"] and not users[user]["Blocked"]:
         status = "Authentication Successful. Welcome, %s" % user
         bot.send_message(chat_id=update.message.chat_id, text=status)
         users[user]["LoggedIn"]=True
@@ -45,23 +52,12 @@ def validate_password(bot, update, config):
     else:
         users[user]["LoginAttempts"] += 1
         print_status("%s inputted an incorrect password" % user)
-
-        # check if block limit is hit
-        if users[user]["LoginAttempts"] == config["LoginAttemptsLimit"]:
-            users[user]["Blocked"] = True
-            status = "Incorrect password, you have been blocked. Goodbye."
-            bot.send_message(chat_id=update.message.chat_id, text=status)
-            save_users_json(users)
-            print_status("%s is now blocked" % user)
-            return False
-        else:
-            remaining_attempts = config["LoginAttemptsLimit"] - users[user]['LoginAttempts']
-            status = "Incorrect password, please try again. Remaining attempts: %d" % remaining_attempts
-            bot.send_message(chat_id=update.message.chat_id, text=status)
-            save_users_json(users)
-            print_status("%s has %d remaining password attempts" % (user, remaining_attempts))
-            return False
-
+        remaining_attempts = config["LoginAttemptLimit"] - users[user]['LoginAttempts']
+        status = "Incorrect password, please try again. Remaining attempts: %d" % remaining_attempts
+        bot.send_message(chat_id=update.message.chat_id, text=status)
+        save_users_json(users)
+        print_status("%s has %d remaining password attempts" % (user, remaining_attempts))
+        return False
 
 def get_users_json():
     with open("config/users.json", 'r') as users_file:
