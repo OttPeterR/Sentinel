@@ -1,11 +1,7 @@
-import logging
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-
 import authentication
 
 def init_bot(config, camera):
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                     level=logging.INFO)
     return Bot(config, camera)
 
 def print_status(message):
@@ -17,8 +13,6 @@ class Bot:
         # take values from config
         self.config = config
         self._loginAttemptLimit = config["LoginAttemptLimit"]
-        self._is_running = True
-        self._logged_in_users = authentication.get_logged_in_users()
 
         # set camera
         self.camera = camera
@@ -33,30 +27,45 @@ class Bot:
 
 
     def setup_handlers(self):
-        # /start
+        # # /start
         start_handler = CommandHandler('start', self.start)
         self.dispatcher.add_handler(start_handler)
+        # self.add_command_handler('start', self.start)
 
-        # /password
-        password_handler = CommandHandler('password', self.password)
-        self.dispatcher.add_handler(password_handler)
+        # # /password
+        self.add_command_handler('password', self.password)
 
-        # /toggle
-        toggle_handler = CommandHandler('toggle', self.toggle)
-        self.dispatcher.add_handler(toggle_handler)
+        # # /toggle
+        self.add_command_handler('toggle', self.toggle)
 
-        # catch all for text
-        text_handler = MessageHandler(Filters.text, self.filter_text)
-        self.dispatcher.add_handler(text_handler)
+        # # catch-all for any text
+        self.add_message_handler(Filters.text, self.filter_text)
 
-    def is_running(self):
-        return self._is_running
+    def add_command_handler(self, command, handler_func):
+        # wrapping the function with an auth check
+        def wrapped_handler_func(bot, update):
+            auth_status = authentication.get_login_status(update)    
+            if auth_status:
+                self.handler_func(bot, update)
+        # attaching the function
+        handler_obj = CommandHandler(command, wrapped_handler_func)
+        self.dispatcher.add_handler(handler_obj)
 
+    def add_message_handler(self, message_filter, handler_func):
+        # wrapping the function with an auth check
+        def wrapped_handler_func(bot, update):
+            auth_status = authentication.get_login_status(update)    
+            if auth_status:
+                self.handler_func(bot, update)
+        # attaching the function
+        handler_obj = MessageHandler(message_filter, wrapped_handler_func)
+        self.dispatcher.add_handler(handler_obj)
 
     #### message handlers ####
-
-
     def start(self, bot, update):
+        # create 
+        authentication.get_login_status(update)
+
         auth_message = "Please authenticale with: /password PASSWORD"
         bot.send_message(chat_id=update.message.chat_id, text=auth_message)
 
@@ -66,12 +75,9 @@ class Bot:
         # check if they are already logged in
         if auth_status:
             bot.send_message(chat_id=update.message.chat_id, text="You are already logged in.")
-            return 
         # check password
         else:
             auth_status = authentication.validate_password(bot, update, self.config)
-            # update the logged in users list
-            self._logged_in_users = authentication.get_logged_in_users()
 
     
     def toggle(self, bot, update):
