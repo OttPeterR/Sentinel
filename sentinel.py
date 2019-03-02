@@ -69,7 +69,7 @@ def run():
         try:
             while True:
                 sleep(0.2) 
-                # check for telegram messages
+                # checks for telegram messages in background
                 # 
         except KeyboardInterrupt:
             print() # this takes care of the "^C" from the user's input
