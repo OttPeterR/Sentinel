@@ -6,22 +6,19 @@ from telegram_bot.handlers import password_handler
 from telegram_bot.handlers import start_handler
 from telegram_bot.handlers import text_handler
 
-def init_bot(config, camera):
+def init_bot(config):
     
-    return Bot(config, camera)
+    return Bot(config)
 
 def print_status(message):
     print("[Sentinel]: %s" % str(message))
 
 
 class Bot:
-    def __init__(self, config, camera):
+    def __init__(self, config):
         # take values from config
         self.config = config
         self._loginAttemptLimit = config["LoginAttemptLimit"]
-
-        # set camera
-        self.camera = camera
 
         # hook up message responses
         self.updater = Updater(token=config["Token"])

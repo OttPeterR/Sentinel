@@ -16,9 +16,9 @@ def load_config():
     print_status("Config Loaded")
     return config_json
 
-def init_telegram(telegram_bot_config, camera):
+def init_telegram(telegram_bot_config):
     # obtain the raspi camera resource
-    bot = telegram_bot.init_bot(telegram_bot_config, camera)
+    bot = telegram_bot.init_bot(telegram_bot_config)
     # return False if any issue
     if bot is None or bot is False:
         print_status("! Telegram Bot Init Failure")
@@ -36,57 +36,49 @@ def init_camera(camera_config):
         return None
     else:
         print_status("Camera Active")
-        return camera
+        return True
 
 
+def startup():
+    print_status("Starting Up...")
+    config = load_config()
 
-class Sentinel:
+    # init bot and camera    
+    camera_status = init_camera(config['Camera'])
+    bot_status = init_telegram(config['TelegramBot'])
 
-    def __init__(self):
-        self.camera = None
-        self.telegram_bot = None
+    # check that init was successful
+    if(not(bot_status and camera_status)):
+        print_status("Startup Failure")
+        print_status("Exiting...")
+        return False
+    else:
+        print_status("Start Up Complete")
+        return True
 
-    def startup(self):
-        print_status("Starting Up...")
-        config = load_config()
-
-        # init bot and camera    
-        self.camera = init_camera(config['Camera'])
-        self.telegram_bot = init_telegram(config['TelegramBot'], self.camera)
-
-        # check that init was successful
-        if(not(self.telegram_bot and self.camera)):
-            print_status("Startup Failure")
-            print_status("Exiting...")
-            return False
-        else:
-            print_status("Start Up Complete")
-            return True
-
-    # closes any resources cleanly
-    def shutdown(self):
-        print_status("Shutting Down...")
-        return
+# closes any resources cleanly
+def shutdown():
+    print_status("Shutting Down...")
+    return
 
 
-    def run(self):
-        startup_status = self.startup()
-        print_status("Bot Is Active")
-        if startup_status:
-            try:
-                while True:
-                    sleep(0.2) 
-                    # check for telegram messages
-                    # 
-            except KeyboardInterrupt:
-                print() # this takes care of the "^C" from the user's input
-                print_status("Keyboard Interrupt")
-                #for chat_id in approved_user_chat_id:
-                #bot.sendMessage(chat_id, 'Sentinel: offline')
-        self.shutdown()
-        os._exit(0)
+def run():
+    startup_status = startup()
+    print_status("Bot Is Active")
+    if startup_status:
+        try:
+            while True:
+                sleep(0.2) 
+                # check for telegram messages
+                # 
+        except KeyboardInterrupt:
+            print() # this takes care of the "^C" from the user's input
+            print_status("Keyboard Interrupt")
+            #for chat_id in approved_user_chat_id:
+            #bot.sendMessage(chat_id, 'Sentinel: offline')
+    shutdown()
+    os._exit(0)
 
 
 if __name__ == '__main__':
-    sentinel = Sentinel()
-    sentinel.run()
+    run()
