@@ -1,3 +1,5 @@
+# turn this into a thread-safe singleton
+
 camera = None
 is_watching = None
 fps = None
@@ -17,9 +19,9 @@ def init_camera(config):
     image_change_percentage = config["ImageChangePercentage"]
     return True
 
-    def start_watching(self):
-        self.start_watching = True
+def start_watching():
+    start_watching = True
 
-    def toggle(self):
-        self.is_watching = not self.is_watching
-        return self.is_watching
+def toggle():
+    is_watching = not is_watching
+    return is_watching
